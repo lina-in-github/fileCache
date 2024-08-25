@@ -1,6 +1,5 @@
 // Define GameData[GlobalConst.COOKIE]
 function init(){
-
 if (!GlobalConst.COOKIE in GameData){
 GameData[GlobalConst.COOKIE] = {
   PLAYER_HEALTH: 100,
