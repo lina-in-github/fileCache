@@ -28,7 +28,11 @@ class Player {
       console.log(`${this.name}'s attack is blocked by ${target.name}'s defense!`);
     }
   }
-
+  save(COOKIE){
+    GameData[COOKIE].PLAYER_HEALTH=this.health;
+    GameData[COOKIE].PLAYER_ATTACK_POWER=this.attackPower;
+    GameData[COOKIE].PLAYER_DEFENSE=this.defense;
+  }
   move(position) {
     //TODO: Implement
     console.log(`${this.name} moves to ${position}!`);
@@ -58,6 +62,8 @@ SetMenu({
   },
   'move': function() {
     //TODO: Implement logic to handle player moving to another position
+    //TABNINE:implement it
+    //GlobalConst.COOKIE
   },
   'defend': function() {
     //TODO: Implement logic to handle player defending
