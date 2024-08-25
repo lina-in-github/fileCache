@@ -33,6 +33,19 @@ class Map:
         self.scale=(height,width)
         self.map=[[' ' for _ in range(width)] for _ in range(height)]
         self.snake=Snake(self)
+    def render(self,Head_Char='@',Body_Char='#'):
+        sys.stdout.clear()
+        for y,row in enumerate(self.map):
+            for x,cell in enumerate(row):
+                if (x,y)==self.snake.head:
+                    sys.stdout.write(Head_Char)
+                elif (x,y) in self.snake.body:
+                    sys.stdout.write(Body_Char)
+                else:
+                    sys.stdout.write(cell)
+            sys.stdout.write('\n')
+
+
 class Snake:   
     def __init__(self,map):
         randomPos=lambda:(random.randint(0,map.scale.height-1),random.randint(0,map.scale.width-1))     
@@ -45,6 +58,5 @@ class Snake:
         self.body = [(i[0] + direction[0], i[1] + direction[1]) for i in self.body]  # Fixed: Use 'self.body' instead of 'body'
         if isEated:
             self.body.append(tmp)
-
 
 
