@@ -1,33 +1,23 @@
 import random
 import sys
-import tty
-import termios
-
-def readchar():
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
-
-def readkey(getchar_fn=None):
-    getchar = getchar_fn or readchar
-    c1 = getchar()
-    if ord(c1) != 0x1b:
-        return c1
-    c2 = getchar()
-    if ord(c2) != 0x5b:
-        return c1
-    c3 = getchar()
-    return chr(0x10 + ord(c3) - 65)
+import time
+import keyboard
+def readkey():
+    ...
 class FaceEnum:
     UP=(-1,0)
     DOWN=(1,0)
     LEFT=(0,-1)
     RIGHT=(0,1)
+    def __init__(self, char):
+        if char == 'w':
+            self.vector=FaceEnum.UP
+        if char =='a':
+            self.vector=FaceEnum.LEFT
+        if char =='s':
+            self.vector=FaceEnum.DOWN
+        if char =='d':
+            self.vector=FaceEnum.RIGHT
 class Map:
     def __init__(self,height,width):
         self.scale=(height,width)
@@ -45,7 +35,23 @@ class Map:
                 else:
                     sys.stdout.write(cell)
             sys.stdout.write('\n')
-
+    def mainloop(self, faceEnumGenerator):
+        while True:
+            faceEnum=faceEnumGenerator.next()
+            try:
+                targ = False
+                time.sleep(0.5)
+                if self.snake.head == self.food:
+                    targ = True
+                    self.food = (random.randint(0, self.scale.height-1), random.randint(0, self.scale.width-1))
+                if self.snake.head in self.snake.body:
+                    break
+                self.snake.move(faceEnum, targ)
+                self.render()  
+            except:
+                break  
+        sys.stdout.clear()
+        print(f'Game Over!,your length is:{len(self.snake.body)}')    
 
 class Snake:   
     def __init__(self,map):
@@ -59,5 +65,12 @@ class Snake:
         self.body = [(i[0] + direction[0], i[1] + direction[1]) for i in self.body]  # Fixed: Use 'self.body' instead of 'body'
         if isEated:
             self.body.append(tmp)
+def faceEnumGenerator():
+    directions=[FaceEnum.UP,FaceEnum.DOWN,FaceEnum.LEFT,FaceEnum.RIGHT]
+    while True:
+        yield FaceEnum(readkey()).vector
 
+if __name__=='__main__':
+    map=Map(20,30)
+    map.mainloop(faceEnumGenerator())
 
