@@ -38,9 +38,9 @@ class Snake:
         randomPos=lambda:(random.randint(0,map.scale.height-1),random.randint(0,map.scale.width-1))     
         self.head=randomPos()
         self.body=[]
-    def move(self,direction,isEated=False):
-        if isEated:
-            self.body.append((self.head[0],self.head[1]))
-        self.head[0]+=direction[0]
-        self.head[1]+=direction[1]
-        
+def move(self, direction, isEated=False):
+    if isEated:
+        self.body.append(self.head[:])  # Fixed: Append a copy of the head
+    self.head[0] += direction[0]
+    self.head[1] += direction[1]
+    self.body = [(i[0] + direction[0], i[1] + direction[1]) for i in self.body]  # Fixed: Use 'self.body' instead of 'body'
