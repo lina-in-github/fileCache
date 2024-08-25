@@ -1,17 +1,21 @@
-// Define GlobalConst
-var GlobalConst = {
+// Define GameData[GlobalConst.COOKIE]
+function init(){
+
+if (!GlobalConst.COOKIE in GameData){
+GameData[GlobalConst.COOKIE] = {
   PLAYER_HEALTH: 100,
   PLAYER_ATTACK_POWER: 20,
   PLAYER_DEFENSE: 10
 };
-
+}
+}
 // Define Player class
 class Player {
   constructor(name, health, attackPower, defense) {
     this.name = name;
-    this.health = health || GlobalConst.PLAYER_HEALTH;
-    this.attackPower = attackPower || GlobalConst.PLAYER_ATTACK_POWER;
-    this.defense = defense || GlobalConst.PLAYER_DEFENSE;
+    this.health = health || GameData[GlobalConst.COOKIE].PLAYER_HEALTH;
+    this.attackPower = attackPower || GameData[GlobalConst.COOKIE].PLAYER_ATTACK_POWER;
+    this.defense = defense || GameData[GlobalConst.COOKIE].PLAYER_DEFENSE;
   }
 
   // Implement player actions
