@@ -18,7 +18,7 @@ class Player {
     this.defense = defense || GameData[GlobalConst.COOKIE].PLAYER_DEFENSE;
   }
 
-  // Implement player actions
+  //TODO: Implement player actions
   attack(target) {
     const damage = this.attackPower - target.defense;
     if (damage > 0) {
@@ -30,57 +30,41 @@ class Player {
   }
 
   move(position) {
+    //TODO: Implement
     console.log(`${this.name} moves to ${position}!`);
   }
 
   defend() {
+    //TODO: Implement
     console.log(`${this.name} defends!`);
   }
 }
 
 // Define the game map and positions for players
 const gameMap = {
-  positions: [
+positions: [
     { name: 'position1', players: [] },
     { name: 'position2', players: [] },
     { name: 'position3', players: [] }
   ]
 };
-
+//TODO:add player groups logic
 // Implement the game loop to handle player inputs and update the game state
-function gameLoop() {
-  console.log('Welcome to the PvP game!');
-  while (true) {
-    console.log('Choose your action: attack, move, defend, or quit');
-    const action = prompt();
-
-    if (action === 'attack') {
-      // Implement logic to handle player attacking another player
-    } else if (action === 'move') {
-      // Implement logic to handle player moving to another position
-    } else if (action === 'defend') {
-      // Implement logic to handle player defending
-    } else if (action === 'quit') {
-      console.log('Thanks for playing!');
-      break;
-    } else {
-      console.log('Invalid input. Please try again.');
-    }
-  }
-}
-
+// Implement logic to handle player attacking another player
 // Use SetMenu to provide a menu for players to choose their actions
 SetMenu({
   'attack': function() {
-    // Implement logic to handle player attacking another player
+    //TODO: Implement logic to handle player attacking another player
   },
   'move': function() {
-    // Implement logic to handle player moving to another position
+    //TODO: Implement logic to handle player moving to another position
   },
   'defend': function() {
-    // Implement logic to handle player defending
+    //TODO: Implement logic to handle player defending
+
   },
   'quit': function() {
+    delete GameData[GlobalConst.COOKIE];
     console.log('Thanks for playing!');
   }
 });
