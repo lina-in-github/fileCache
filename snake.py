@@ -39,8 +39,12 @@ class Snake:
         self.head=randomPos()
         self.body=[]
 def move(self, direction, isEated=False):
-    if isEated:
-        self.body.append(self.head[:])  # Fixed: Append a copy of the head
     self.head[0] += direction[0]
     self.head[1] += direction[1]
+    tmp=self.body[-1][:]
     self.body = [(i[0] + direction[0], i[1] + direction[1]) for i in self.body]  # Fixed: Use 'self.body' instead of 'body'
+    if isEated:
+        self.body.append(tmp)
+
+
+
