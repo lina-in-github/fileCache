@@ -33,6 +33,7 @@ class Map:
         self.scale=(height,width)
         self.map=[[' ' for _ in range(width)] for _ in range(height)]
         self.snake=Snake(self)
+        self.food=(random.randint(0,height-1),random.randint(0,width-1))
     def render(self,Head_Char='@',Body_Char='#'):
         sys.stdout.clear()
         for y,row in enumerate(self.map):
