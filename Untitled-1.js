@@ -71,6 +71,6 @@ SetMenu({
   },
   'quit': function() {
     delete GameData[GlobalConst.COOKIE];
-    console.log('Thanks for playing!');
+    return('Thanks for playing!');
   }
 });
