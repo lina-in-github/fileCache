@@ -66,7 +66,7 @@ class Map:
             try:
                 targ = False
                 time.sleep(0.5)
-                os.system('cls' if os.name == 'nt' else 'clear')  # FIXME:Fail to clear screen
+                os.system('cls' if os.name == 'nt' else 'clear') 
                 if self.snake.head == self.food:
                     targ = True
                     self.food = (random.randint(0, self.scale[0]-1), random.randint(0, self.scale[1]-1))
@@ -91,11 +91,12 @@ class Snake:
         self.head=randomPos()
         self.body=[]
     def move(self, direction, isEated=False):
-        self.head=(self.head[0]+direction[0],self.head[1]+direction[1])
         tmp=self.body[len(self.body)-1][:] if len(self.body)!=0 else self.head
-        self.body = [(i[0] + direction[0], i[1] + direction[1]) for i in self.body]  # Fixed: Use 'self.body' instead of 'body'
-        if isEated:
-            self.body.append(tmp)
+        hcp=self.head[:]
+        self.head=(self.head[0]+direction[0],self.head[1]+direction[1])
+        self.body.insert(0,hcp)
+        if not isEated:
+            self.body.pop()
 def faceEnumGenerator():
     directions=[FaceEnum.UP,FaceEnum.DOWN,FaceEnum.LEFT,FaceEnum.RIGHT]
     rk=readkey()
@@ -103,6 +104,6 @@ def faceEnumGenerator():
         yield FaceEnum.get(rk.__next__())
 print('\033[?25l')
 if __name__=='__main__':
-    map=Map(20,30)
+    map=Map(20,70)
     map.mainloop(faceEnumGenerator())
 
