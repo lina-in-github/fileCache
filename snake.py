@@ -4,7 +4,6 @@ import time
 import threading
 import os
 import keyboard
-import types
 from typing import List, Tuple,Generator
 
 class KeyChecker:
