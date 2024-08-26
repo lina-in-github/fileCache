@@ -49,7 +49,6 @@ class Map:
         self.snake=Snake(self)
         self.food=(random.randint(0,self.scale[1]-1),random.randint(0,self.scale[0]-1))
     def render(self, Head_Char='@', Body_Char='#',Food_Char='*'):
-        #sdwadwsys.stdout.write('\033[H\033[2J')  # Clear the screen and move the cursor to the top-left corner
         for y, row in enumerate(self.map):
             for x, cell in enumerate(row):
                 if (x, y) == self.snake.head:
@@ -60,7 +59,6 @@ class Map:
                     self.map[y][x] = Food_Char
                 else:
                     self.map[y][x] =' '
-                #sys.stdout.write(cell)
     def mainloop(self, faceEnumGenerator):
         for faceEnum in faceEnumGenerator:
             try:
@@ -70,7 +68,7 @@ class Map:
                     self.food = (random.randint(0, self.scale[1]-1), random.randint(0, self.scale[0]-1))
                 if self.snake.head in self.snake.body:
                     break
-                time.sleep(0.5)
+                time.sleep(0.15)
                 self.snake.move(faceEnum, targ)
                 os.system('cls' if os.name == 'nt' else 'clear') 
                 self.render()  
@@ -78,27 +76,21 @@ class Map:
                     for cell in line:
                         sys.stdout.write(cell+' ')
                     sys.stdout.write('\n')
-                
-            except IndexError as e:
-                #raise
+            except IndexError:
                 break  
-            #print('\033[2J')
         print(f'Game Over!,your length is:{len(self.snake.body)}')
-
 class Snake:   
     def __init__(self,map):
         randomPos=lambda:(random.randint(0,map.scale[0]),random.randint(0,map.scale[1]-1))     
         self.head=randomPos()
         self.body=[]
     def move(self, direction, isEated=False):
-        tmp=self.body[len(self.body)-1][:] if len(self.body)!=0 else self.head
         hcp=self.head[:]
         self.head=(self.head[0]+direction[0],self.head[1]+direction[1])
         self.body.insert(0,hcp)
         if not isEated:
             self.body.pop()
 def faceEnumGenerator():
-    directions=[FaceEnum.UP,FaceEnum.DOWN,FaceEnum.LEFT,FaceEnum.RIGHT]
     rk=readkey()
     while True:
         yield FaceEnum.get(rk.__next__())
@@ -106,4 +98,3 @@ print('\033[?25l')
 if __name__=='__main__':
     map=Map(15,35)
     map.mainloop(faceEnumGenerator())
-
