@@ -47,7 +47,7 @@ class Map:
         self.scale=(height,width)
         self.map=[[' ' for _ in range(width)] for _ in range(height)]
         self.snake=Snake(self)
-        self.food=(random.randint(0,height-1),random.randint(0,width-1))
+        self.food=(random.randint(0,self.scale[1]-1),random.randint(0,self.scale[0]-1))
     def render(self, Head_Char='@', Body_Char='#',Food_Char='*'):
         #sdwadwsys.stdout.write('\033[H\033[2J')  # Clear the screen and move the cursor to the top-left corner
         for y, row in enumerate(self.map):
@@ -65,14 +65,14 @@ class Map:
         for faceEnum in faceEnumGenerator:
             try:
                 targ = False
-                time.sleep(0.5)
-                os.system('cls' if os.name == 'nt' else 'clear') 
                 if self.snake.head == self.food:
                     targ = True
-                    self.food = (random.randint(0, self.scale[0]-1), random.randint(0, self.scale[1]-1))
+                    self.food = (random.randint(0, self.scale[1]-1), random.randint(0, self.scale[0]-1))
                 if self.snake.head in self.snake.body:
                     break
+                time.sleep(0.5)
                 self.snake.move(faceEnum, targ)
+                os.system('cls' if os.name == 'nt' else 'clear') 
                 self.render()  
                 for line in self.map:
                     for cell in line:
@@ -104,6 +104,6 @@ def faceEnumGenerator():
         yield FaceEnum.get(rk.__next__())
 print('\033[?25l')
 if __name__=='__main__':
-    map=Map(20,70)
+    map=Map(6,30)
     map.mainloop(faceEnumGenerator())
 
