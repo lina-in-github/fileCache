@@ -81,17 +81,21 @@ class Map:
                 if self.snake.head == self.food:
                     targ = True
                     self.food = (random.randint(0, self.scale[1] - 1), random.randint(0, self.scale[0] - 1))
-                
+                if not(0<self.snake.head[1]<self.scale[0] or 0<self.snake.head[0]<self.scale[1]):
+                    break
                 if self.snake.head in self.snake.body:
                     break
                 time.sleep(0.15)  
                 self.snake.move(faceEnum, targ)  
                 os.system('cls' if os.name == 'nt' else 'clear')  
                 self.render()  
+                print(' '+'-'*self.scale[1]*2,end='\n|')
                 for line in self.map:
                     for cell in line:
                         sys.stdout.write(cell +' ')
-                    sys.stdout.write('\n')
+                    sys.stdout.write('|\n|')
+                    sys.stdout.flush()
+                print('\b '+'-'*self.scale[1]*2)
             except IndexError:
                 break  
         print(f'Game Over!,your length is:{len(self.snake.body)}')
