@@ -48,7 +48,7 @@ class Map:
         self.map=[[' ' for _ in range(width)] for _ in range(height)]
         self.snake=Snake(self)
         self.food=(random.randint(0,self.scale[1]-1),random.randint(0,self.scale[0]-1))
-    def render(self, Head_Char='@', Body_Char='#',Food_Char='*'):
+    def render(self, Head_Char='\033[36m@\033[0m', Body_Char='\033[36m#\033[0m',Food_Char='\033[31m*\033[0m'):
         for y, row in enumerate(self.map):
             for x, cell in enumerate(row):
                 if (x, y) == self.snake.head:
@@ -96,5 +96,5 @@ def faceEnumGenerator():
         yield FaceEnum.get(rk.__next__())
 print('\033[?25l')
 if __name__=='__main__':
-    map=Map(15,35)
+    map=Map(20,40)
     map.mainloop(faceEnumGenerator())
