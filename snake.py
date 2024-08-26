@@ -104,6 +104,6 @@ def faceEnumGenerator():
         yield FaceEnum.get(rk.__next__())
 print('\033[?25l')
 if __name__=='__main__':
-    map=Map(6,30)
+    map=Map(15,35)
     map.mainloop(faceEnumGenerator())
 
