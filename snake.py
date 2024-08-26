@@ -24,7 +24,7 @@ def readkey():
                 if keyboard.is_pressed('d'):
                     pressedkey='d'
                 time.sleep(0.1)
-    p()
+    p().start()
     while True:
         yield pressedkey
 class FaceEnum:
