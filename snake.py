@@ -4,29 +4,33 @@ import time
 import threading
 import os
 import keyboard
-pressedkey='w'
-def readkey():
-    class p(threading.Thread):
-        def __init__(self):
-            threading.Thread.__init__(self)
-            self.daemon = True
-            self.setDaemon(True)
-            self.start()
-        def run(self):
-            global pressedkey
-            while True:
-                if keyboard.is_pressed('w'):
-                    pressedkey='w'
-                if keyboard.is_pressed('a'):
-                    pressedkey='a'
-                if keyboard.is_pressed('s'):
-                    pressedkey='s'
-                if keyboard.is_pressed('d'):
-                    pressedkey='d'
-                time.sleep(0.1)
-    p()
-    while True:
-        yield pressedkey
+import types
+
+class KeyChecker:
+    pressedkey='w'
+    @classmethod
+    def readkey(cls):
+        class p(threading.Thread):
+            def __init__(self):
+                threading.Thread.__init__(self)
+                self.daemon = True
+                self.setDaemon(True)
+                self.start()
+            def run(self):
+                #global pressedkey
+                while True:
+                    if keyboard.is_pressed('w'):
+                        cls.pressedkey='w'
+                    if keyboard.is_pressed('a'):
+                        cls.pressedkey='a'
+                    if keyboard.is_pressed('s'):
+                        cls.pressedkey='s'
+                    if keyboard.is_pressed('d'):
+                        cls.pressedkey='d'
+                    time.sleep(0.1)
+        p()
+        while True:
+            yield cls.pressedkey
 class FaceEnum:
     LEFT=(-1,0)
     RIGHT=(1,0)
@@ -91,7 +95,7 @@ class Snake:
         if not isEated:
             self.body.pop()
 def faceEnumGenerator():
-    rk=readkey()
+    rk=KeyChecker.readkey()
     while True:
         yield FaceEnum.get(rk.__next__())
 print('\033[?25l')
