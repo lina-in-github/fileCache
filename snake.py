@@ -76,11 +76,11 @@ class Map:
                 self.render()  
                 for line in self.map:
                     for cell in line:
-                        sys.stdout.write(cell)
+                        sys.stdout.write(cell+' ')
                     sys.stdout.write('\n')
                 
             except IndexError as e:
-                raise
+                #raise
                 break  
             #print('\033[2J')
         print(f'Game Over!,your length is:{len(self.snake.body)}')

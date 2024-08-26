@@ -51,7 +51,7 @@ positions: [
     { name: 'position3', players: [] }
   ]
 };
-//TODO:add player groups logic
+//TODO: add player groups logic
 // Implement the game loop to handle player inputs and update the game state
 // Implement logic to handle player attacking another player
 // Use SetMenu to provide a menu for players to choose their actions
