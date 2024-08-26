@@ -23,7 +23,7 @@ def readkey():
                     pressedkey='s'
                 if keyboard.is_pressed('d'):
                     pressedkey='d'
-                time.sleep(0.01)
+                time.sleep(0.1)
     p()
     while True:
         yield pressedkey
