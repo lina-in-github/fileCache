@@ -4,23 +4,32 @@ import time
 import threading
 import os
 import keyboard
-from typing import List, Tuple,Generator
+from typing import List, Tuple, Generator
+
+class Scale:
+    def __init__(self, height: int, width: int):
+        self.height = height
+        self.width = width
+
+class Position:
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+    def __eq__(self, value: object) -> bool:
+        return isinstance(value, Position) and self.x == value.x and self.y == value.y
 
 class KeyChecker:
     pressedkey: str = 'w'  
     @classmethod
     def readkey(cls) -> Generator[str, None, None]:
-        
         class p(threading.Thread):
             def __init__(self) -> None:
                 threading.Thread.__init__(self)
                 self.daemon = True  
-                
                 self.start()  
 
             def run(self) -> None:
                 while True:
-                    
                     if keyboard.is_pressed('w'):
                         cls.pressedkey = 'w'
                     if keyboard.is_pressed('a'):
@@ -54,58 +63,65 @@ class FaceEnum:
 
 
 class Map:
-    def __init__(self, height: int, width: int) -> None:
-        self.scale: Tuple[int, int] = (height, width)  
-        self.map: List[List[str]] = [[' ' for _ in range(width)] for _ in range(height)]  
-        self.snake: Snake = Snake(self)  
-        self.food: Tuple[int, int] = (random.randint(0, self.scale[1] - 1), random.randint(0, self.scale[0] - 1))  
+    def __init__(self, scale: Scale):
+        self.scale = scale
+        self.map = [[' ' for _ in range(scale.width)] for _ in range(scale.height)]
+        self.snake = Snake(self)
+        self.generate_food()
+
+    def generate_food(self):
+        self.food = Position(random.randint(0, self.scale.width - 1), random.randint(0, self.scale.height - 1))
 
     def render(self, Head_Char: str = '\033[36m@\033[0m', Body_Char: str = '\033[36m#\033[0m', Food_Char: str = '\033[31m*\033[0m') -> None:
-        self.map = [[' ' for _ in range(self.scale[1])] for _ in range(self.scale[0])]  
+        self.map = [[' ' for _ in range(self.scale.width)] for _ in range(self.scale.height)]
         self.snake.render(self, Head_Char, Body_Char)
-        self.map[self.food[1]][self.food[0]]=Food_Char
+        self.map[self.food.y][self.food.x] = Food_Char
+
     def mainloop(self, faceEnumGenerator: Generator[Tuple[int, int], None, None]) -> None:
         for faceEnum in faceEnumGenerator:
             try:
                 targ: bool = False
-                
                 if self.snake.head == self.food:
                     targ = True
-                    self.food = (random.randint(0, self.scale[1] - 1), random.randint(0, self.scale[0] - 1))
+                    self.generate_food()
                 if self.snake.head in self.snake.body:
                     break
                 time.sleep(0.15)  
                 self.snake.move(faceEnum, targ)  
                 os.system('cls' if os.name == 'nt' else 'clear')  
                 self.render()  
-                print(' '+'-'*self.scale[1]*2,end='\n|')
+                print(' '+'-'*self.scale.width*2,end='\n|')
                 for line in self.map:
                     for cell in line:
                         sys.stdout.write(cell +' ')
                     sys.stdout.write('|\n|')
                     sys.stdout.flush()
-                print('\b '+'-'*self.scale[1]*2)
+                print('\b '+'-'*self.scale.width*2)
             except IndexError:
                 break  
         print(f'Game Over!,your length is:{len(self.snake.body)}')
 
-class Snake:   
-    def __init__(self, map: Map) -> None:
-        randomPos = lambda: (random.randint(0, map.scale[0]), random.randint(0, map.scale[1] - 1))     
-        self.head: Tuple[int, int] = randomPos()
-        self.body: List[Tuple[int, int]] = []
+class Snake:
+    def __init__(self, map: Map):
+        self.map = map
+        self.head = self.generate_random_pos()
+        self.body = []
 
+    def generate_random_pos(self):
+        return Position(random.randint(0, self.map.scale.width), random.randint(0, self.map.scale.height))
 
     def move(self, direction: Tuple[int, int], isEated: bool = False) -> None:
-        hcp: Tuple[int, int] = self.head[:]
-        self.head = (self.head[0] + direction[0], self.head[1] + direction[1])
+        hcp = Position(self.head.x, self.head.y)
+        self.head.x += direction[0]
+        self.head.y += direction[1]
         self.body.insert(0, hcp)
         if not isEated:
             self.body.pop()
+
     def render(self, map: Map, Head_Char: str, Body_Char: str) -> None:
-        map.map[self.head[1]][self.head[0]]=Head_Char
+        map.map[self.head.y][self.head.x] = Head_Char
         for body in self.body:
-            map.map[body[1]][body[0]] = Body_Char
+            map.map[body.y][body.x] = Body_Char
 
 
 def faceEnumGenerator() -> Generator[Tuple[int, int], None, None]:
@@ -115,5 +131,5 @@ def faceEnumGenerator() -> Generator[Tuple[int, int], None, None]:
 
 print('\033[?25l')  
 if __name__ == '__main__':
-    map = Map(20, 40)  
-    map.mainloop(faceEnumGenerator()) 
+    map = Map(Scale(20,40))  
+    map.mainloop(faceEnumGenerator())
