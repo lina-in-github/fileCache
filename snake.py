@@ -5,14 +5,22 @@ import threading
 import os
 import keyboard
 from typing import List, Tuple, Generator
-
+scaleSingleton:'Scale'=None
 class Scale:
     def __init__(self, height: int, width: int):
         self.height = height
         self.width = width
+    @classmethod
+    def getInstance(cls):
+        global scaleSingleton
+        if scaleSingleton is None:
+            scaleSingleton = cls(20, 40)
+        return scaleSingleton
 
 class Position:
     def __init__(self, x: int, y: int):
+        if x < 0 or y < 0:
+            raise IndexError('Position out of range')
         self.x = x
         self.y = y
     def __eq__(self, value: object) -> bool:
@@ -131,5 +139,5 @@ def faceEnumGenerator() -> Generator[Tuple[int, int], None, None]:
 
 print('\033[?25l')  
 if __name__ == '__main__':
-    map = Map(Scale(20,40))  
+    map = Map(Scale.getInstance())  
     map.mainloop(faceEnumGenerator())
