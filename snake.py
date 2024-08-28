@@ -81,8 +81,6 @@ class Map:
                 if self.snake.head == self.food:
                     targ = True
                     self.food = (random.randint(0, self.scale[1] - 1), random.randint(0, self.scale[0] - 1))
-                if not(0<self.snake.head[1]<self.scale[0] or 0<self.snake.head[0]<self.scale[1]):
-                    break
                 if self.snake.head in self.snake.body:
                     break
                 time.sleep(0.15)  
