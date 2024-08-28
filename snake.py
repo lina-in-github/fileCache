@@ -61,18 +61,9 @@ class Map:
         self.food: Tuple[int, int] = (random.randint(0, self.scale[1] - 1), random.randint(0, self.scale[0] - 1))  
 
     def render(self, Head_Char: str = '\033[36m@\033[0m', Body_Char: str = '\033[36m#\033[0m', Food_Char: str = '\033[31m*\033[0m') -> None:
-        for y, row in enumerate(self.map):
-            for x, cell in enumerate(row):
-                
-                if (x, y) == self.snake.head:
-                    self.map[y][x] = Head_Char
-                elif (x, y) in self.snake.body:
-                    self.map[y][x] = Body_Char
-                elif (x, y) == self.food:
-                    self.map[y][x] = Food_Char
-                else:
-                    self.map[y][x] =' '
-
+        self.map = [[' ' for _ in range(self.scale[1])] for _ in range(self.scale[0])]  
+        self.snake.render(self, Head_Char, Body_Char)
+        self.map[self.food[1]][self.food[0]]=Food_Char
     def mainloop(self, faceEnumGenerator: Generator[Tuple[int, int], None, None]) -> None:
         for faceEnum in faceEnumGenerator:
             try:
@@ -111,6 +102,10 @@ class Snake:
         self.body.insert(0, hcp)
         if not isEated:
             self.body.pop()
+    def render(self, map: Map, Head_Char: str, Body_Char: str) -> None:
+        map.map[self.head[1]][self.head[0]]=Head_Char
+        for body in self.body:
+            map.map[body[1]][body[0]] = Body_Char
 
 
 def faceEnumGenerator() -> Generator[Tuple[int, int], None, None]:
